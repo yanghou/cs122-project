@@ -89,6 +89,9 @@ def get_summary_file_table(var_dict, state="*", county="*"):
     elif var_type == 'households':
         normalize = True
         denominator = ',B22002_001E'
+    elif var_type == 'labor_force':
+        normalize = True
+        denominator = ',B23025_003E'
     elif var_type == 'value':
         normalize = False
         denominator = ''

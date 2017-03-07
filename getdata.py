@@ -38,14 +38,14 @@ def create_variable_dict(sex=None, race=None, employment=None, income=None,
     '''
     '''
     if name == None:
-        name = ''
+        name = 'percent'
         characteristics = [employment, income, race, sex]
         for c in characteristics:
             if c == None:
                 pass
             else:
-                name = name + c + "_"
-        name = name[:-1]
+                name = name + " " + c
+        name = name
 
     char_dict = {'name': name, 'sex': sex, 'race': race, 'employment': employment, 
         'income': income}
@@ -62,15 +62,43 @@ def get_variables():
     black = create_variable_dict(race='black')
     latino = create_variable_dict(race='latino')
     white_men = create_variable_dict('male', 'white')
-    gini = {'id': 'B19083_001E', 'name': 'gini', 'type': 'value'}
+    gini = {'id': 'B19083_001E', 'name': 'Gini Coefficient', 'type': 'value'}
+    income = {'id': 'B19301_001E', 'name': 'per capita income', 
+        'type': 'value'}
+    white_income = {'id': 'B19301H_001E', 'name': 
+    'per capita income amongst whites', 'type': 'value'}
+    unemployed = {'id': 'B23025_005E', 'name': 'unemployment rate', 
+        'type': 'labor_force'}
+    uneducated = {'id': 'B06009_002E', 'name': "no highschool diploma",
+        'type': 'population'}
+    uneducated_unemployed = {'id': 'B23006_007E', 'name': 
+        'unemployment rate (no highschool)', 'type': 'labor_force'}
+    uneducated_white_men = {'id': 'C15002H_003E', 'name': 
+            'white men w/o highschool diploma', 'type': 'population'}
+    labor_force_rate = {'id': 'B23025_003E', 'name': 
+        'labor force particiipation rate', 'type': 'population'}
 
-    var_dicts = [women, white, black, latino, white_men, gini]
 
+
+    var_dicts = [women, white, black, latino, white_men, gini, income,
+                 white_income, unemployed, uneducated, uneducated_unemployed, 
+                 labor_force_rate, uneducated_white_men]
+
+    return var_dicts
+
+
+def get_data():
+    '''
+    '''
+    var_dicts = get_variables()
     df = formatdata.create_multi_variable_table(var_dicts)
+    i = -1 * len(var_dicts)
+    variables = df.columns[i:]
 
-    return df
+    return df, variables
 
 
 if __name__ == '__main__':
-    df = get_variables()
-    print(df)
+    #df = get_data()
+    #df
+    pass
