@@ -4,9 +4,9 @@ import pandas as pd
 def query_database(d):
     db=sqlite3.connect('data.db')
     c=db.cursor()
-    command1='select '
-    command2='select '
-    command3='select margin from data;'
+    command1='select fips,'
+    command2='select fips,'
+    command3='select fips,margin from data;'
     if len(d['independent'])==1:
         command1=command1+d['independent'][0]+' from data;'
     else:
