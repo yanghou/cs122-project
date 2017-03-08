@@ -42,7 +42,6 @@ def analyze(query_dict):
     return rv
 
 
-
 def get_data():
     data = pd.read_csv('data_without_nans.csv',
         dtype={'fips': str, 'state': str, 'county': str})
@@ -50,8 +49,15 @@ def get_data():
     return data
 
 
+def get_variable_names():
+    variable_display_names = pd.read_csv('variables.csv')
+    name_dict = {}
+    for i, row in variable_display_names.iterrows():
+        name_dict[row['Name in Database']] = row['Axes Name']
+    return variable_display_names, name_dict
+
 
 if __name__ == "__main__":
     d = {"independent":['p_labor_force', 'p_white'], 
-        'control':[('median_income', None), ('p_unemployed',0.9), ('p_no_highschool',None)]}
+        'control':[('median_income', None), ('p_unemployed',0.05), ('p_no_highschool',None)]}
     result = analyze(d)

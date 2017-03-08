@@ -59,10 +59,14 @@ class Model(object):
         if type(i_var) != list:
             self.i_var = [i_var]
             print("Independent variable not passed as list")
-        elif len(i_var) > 2:
-            raise ValueError('Too many independent variables given')
-        else:
+        elif len(i_var) == 2:
             self.i_var = i_var
+        elif len(i_var) > 2:
+            self.i_var = i_var[:2]
+        elif len(i_var) == 1:
+            self.i_var = i_var.append('p_white')
+        else:
+            self.i_var = ['p_female','p_white']
 
         if type(c_var) != list:
             self.c_var = [c_var]
