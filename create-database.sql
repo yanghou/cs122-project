@@ -8,7 +8,7 @@ create table  geocodes (
     primary key (fips));
 
 .separator ","
-.import geocodes.csv geocodes
+.import geo_new.csv geocodes
 
 create table data (
     fips integer,
@@ -30,6 +30,6 @@ create table data (
     unemployment_rate_no_highschool numeric,
     labor_force_particiipation_rate numeric,
     white_men_with_highschool_diploma numeric,
-    foreign key (fips) references geocodes(fips));
+    foreign key (fips) references geocodes (fips));
 
-.import data.csv data
+.import data_new.csv data
