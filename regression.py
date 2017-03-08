@@ -10,6 +10,9 @@ import formatdata
 import matplotlib.pyplot as plt
 
 
+
+
+
 def lin_regression(X, Y, verbose=False):
     '''
     '''
@@ -22,30 +25,6 @@ def lin_regression(X, Y, verbose=False):
         print("m:", m, "b:", b)
         print("R^2:", r2)
     return m, b, r2
-
-
-def plot_single_variable(X,Y,m,b,x_var):
-    '''
-    '''
-    x_max = X.max().iat[0]
-    x_min = X.min().iat[0]
-    plt.scatter(X,Y, color='blue')
-    plt.plot([0,1],[b,m+b], 'r')
-    plt.xlim( (x_min, x_max) )
-    plt.ylim(0,1)
-    plt.xlabel(x_var.title())
-    plt.ylabel('Trump Vote Share')
-    plt.show()
-
-
-def plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var):
-    '''
-    '''
-    plt.scatter(X_trump, Y_trump, color='red')
-    plt.scatter(X_clinton, Y_clinton, color='blue')
-    plt.xlabel(x_var.title())
-    plt.ylabel(y_var.title())
-    plt.show()
 
 
 def run_regressions(df, variables):
@@ -104,8 +83,32 @@ def run_partitions(df, variables):
             y_var = variables[i+1]
             trump = df[df.lead == 'Donald Trump']
             clinton = df[df.lead == 'Hillary Clinton']
-            dyadic_partition(trump[[x_var]], trump[[y_var]], 
+            plot_two_variables(trump[[x_var]], trump[[y_var]], 
                 clinton[[x_var]], clinton[[y_var]], x_var, y_var)
+
+
+def plot_single_variable(X,Y,m,b,x_var):
+    '''
+    '''
+    x_max = X.max().iat[0]
+    x_min = X.min().iat[0]
+    plt.scatter(X,Y, color='blue')
+    plt.plot([0,1],[b,m+b], 'r')
+    plt.xlim( (x_min, x_max) )
+    plt.ylim(0,1)
+    plt.xlabel(x_var.title())
+    plt.ylabel('Vote Margin')
+    plt.show()
+
+
+def plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var):
+    '''
+    '''
+    plt.scatter(X_trump, Y_trump, color='red')
+    plt.scatter(X_clinton, Y_clinton, color='blue')
+    plt.xlabel(x_var.title())
+    plt.ylabel(y_var.title())
+    plt.show()
 
 
 
@@ -117,4 +120,4 @@ if __name__ == "__main__":
     #best_vars, max_r2 = find_best_K(df,variables, 8)
     #print(best_vars)
     #print(max_r2)
-    #run_partitions(df, ['percent white male', 'Gini Coefficient'])
+    run_partitions(df, ['percent white male', 'Gini Coefficient'])
