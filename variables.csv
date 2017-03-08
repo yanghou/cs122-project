@@ -1,0 +1,13 @@
+Id,Divisor,Name in Database,Name in Interface,Low Value,High Value
+B01001_026E,B01001_001E,p_female,Sex,,
+B01001H_001E,B01001_001E,p_white,Race,,
+B06002_001E,,median_age,Age,,
+B06009_002E,B01001_001E,p_no_highschool,Education,,
+C18120_006E,C18120_002E,p_unemployed,Unemployment Rate,,
+C18120_001E,B01001_001E,p_labor_force,Labor Force Participation Rate,,
+B19326_001E,,median_income,Median Income,,
+B19083_001E,,gini,Income Inequality,,
+B17001_002E,B01001_001E,p_poverty,Poverty,,
+B24031_006E,,median_mfr_income,Manufacturing Earnings,,
+B06001_049E,B01001_001E,p_foreign_born,Born in USA,,
+B04006_005E,B01001_001E,p_american,Identify as American,,
