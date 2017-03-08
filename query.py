@@ -39,7 +39,7 @@ def query_database(d):
     c.execute(command1)
     names1=get_header(c)
     independent1=c.fetchall()
-    if 'contorl' not in d:
+    if 'control' not in d:
         control=None
     else:
         if len(d['control'])==1:
