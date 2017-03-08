@@ -50,16 +50,17 @@ def run_combined_regressions(predictor_data, dependent_data, predictor_names, pd
     return b, r2, (irct, ircts_ctrl)
 
 
-
 class Model(object):
 
-    def __init__(self, data, d_var, i_var, c_var=[]):
+    def __init__(self, data, d_var, i_var, c_var=[], c_values=None, d_data=None, i_data=None, c_data=None):
         self.data = data
         self.d_var = d_var
         
         if type(i_var) != list:
             self.i_var = [i_var]
             print("Independent variable not passed as list")
+        elif len(i_var) > 2:
+            raise ValueError('Too many independent variables given')
         else:
             self.i_var = i_var
 
@@ -69,9 +70,19 @@ class Model(object):
         else:
             self.c_var = c_var
 
-        self.i_data = data[i_var]
-        self.d_data = data[d_var]
-        self.c_data = data[c_var]
+        if (i_data is None) or (d_data is None):
+            self.i_data = data[i_var]
+            self.d_data = data[d_var]
+        else:
+            self.i_data = i_data
+            self.d_data = d_data
+
+        if c_data is None:
+            self.c_data = data[c_var]
+        else:
+            self.c_data = c_data
+
+        self.c_values = c_values
 
         # Set self.expected and self.ranges
         self._get_expected()
@@ -89,8 +100,8 @@ class Model(object):
             ranges.append( (vmin, vmax) )
 
         self.expected = expected
-        self.i_expected = expected[:len(i_var)]
-        self.c_expected = expected[len(i_var):]
+        self.i_expected = expected[:len(self.i_var)]
+        self.c_expected = expected[len(self.i_var):]
         self.ranges = ranges
 
 
@@ -160,7 +171,6 @@ class Model(object):
         return X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var
 
 
-
     def go(self, values=None, plot=False):
         controlled, b_ctrl, r2_ctrl, irct_ctrl = self.control_variables(values=values)
 
@@ -180,12 +190,14 @@ class Model(object):
         variable_display_names = pd.read_csv('variables.csv')
         name_dict = {}
         for i, row in variable_display_names.iterrows():
-            name_dict[row['Name in Database']] = row['Name in Interface']
+            name_dict[row['Name in Database']] = row['Axes Name']
+        #(row['Name in Interface'], 
 
 
         # Plot Stuff
         plt.close('all')
         f, axarr = plt.subplots(2,2)
+        
         for i, (X, Y, b, irct, x_var) in enumerate(idv_plot_params):
             x_var = name_dict.get(x_var, x_var)
             plot_single_variable(X, Y, b, irct, x_var, ax=axarr[0,i])
@@ -204,9 +216,12 @@ class Model(object):
         title = x_var + " vs. " + y_var + " (Controlled)"
         axarr[1,1].set_title(title)
 
-        plt.show()
 
-        return b_dict, scaled_params
+        f.subplots_adjust(hspace=0.35, wspace=0.35)
+        f.set_size_inches(10,10, forward=False)
+        plt.savefig('analyze.png')
+
+        return b_dict
 
 
     def best_k(self, k):
@@ -263,22 +278,25 @@ def plot_single_variable(X, Y, b, irct, x_var, ax=None):
     gap = (x_max - x_min) / 20
     x_max = x_max + gap
     x_min = x_min - gap
+
+    Y_ = Y.where(Y < 1.0, 1.0)
+    Y_ = Y_.where(Y > -1.0, -1.0)
     if ax is None:
-        plt.scatter(X,Y, color='blue')
+        plt.scatter(X,Y_, color='blue', alpha=0.1)
         plt.plot([0,1],[irct,b+irct], 'r')
         plt.xlim( (x_min, x_max) )
         plt.ylim(-1,1)
-        plt.xlabel(x_var.title())
-        plt.ylabel('Vote Margin')
+        plt.xlabel(x_var)
+        plt.ylabel('Vote Margin (%)')
         plt.show()
     else:
-        ax.scatter(X,Y, color='blue')
+        ax.scatter(X,Y_, color='blue', alpha=0.1)
         ax.plot([0,1],[irct,b+irct], 'r')
-        ax.set_title(x_var.title())
-        #ax.xlim( (x_min, x_max) )
-        #ax.ylim(-1,1)
-        #ax.xlabel(x_var.title())
-        #ax.ylabel('Vote Margin')
+        ax.set_title(x_var)
+        ax.set_xlim( (x_min, x_max) )
+        ax.set_ylim(-1,1)
+        ax.set_xlabel(x_var)
+        ax.set_ylabel('Vote Margin (%)')
         return ax
 
 
@@ -286,32 +304,33 @@ def plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var, ax=N
     '''
     '''
     if ax is None:
-        plt.scatter(X_trump, Y_trump, color='red')
-        plt.scatter(X_clinton, Y_clinton, color='blue')
-        plt.xlabel(x_var.title())
-        plt.ylabel(y_var.title())
+        plt.scatter(X_trump, Y_trump, color='red', alpha=0.1)
+        plt.scatter(X_clinton, Y_clinton, color='blue', alpha=0.1)
+        plt.xlabel(x_var)
+        plt.ylabel(y_var)
         plt.show()
     else:
-        ax.scatter(X_trump, Y_trump, color='red')
-        ax.scatter(X_clinton, Y_clinton, color='blue')
-        #ax.xlabel(x_var.title())
-        #ax.ylabel(y_var.title())
+        ax.scatter(X_trump, Y_trump, color='red', alpha=0.1)
+        ax.scatter(X_clinton, Y_clinton, color='blue', alpha=0.1)
+        ax.set_xlabel(x_var)
+        ax.set_ylabel(y_var)
         return ax
 
 
 if __name__ == "__main__":
+    
     data = pd.read_csv('data_without_nans.csv',
         dtype={'fips': str, 'state': str, 'county': str})
     data = data.iloc[:,1:]
 
     d_var = ['margin']
-    i_var = ['p_female', 'p_white']
-    c_var = ['median_income', 'p_unemployed']
+    i_var = ['p_labor_force', 'p_white']
+    c_var = ['median_income', 'p_unemployed', 'p_no_highschool']
     m = Model(data, d_var, i_var, c_var)
     
-    b_dict, params = m.go(plot=True)
+    b_dict = m.go(plot=True)
     v_dict = m.best_k(4)
-
+    
 
     #controlled, b, r2, irct = m.control_variables()
 
