@@ -1,13 +1,12 @@
 Id,Divisor,Name in Database,Name in Interface,Low Value,High Value
-B01001_026E,B01001_001E,p_female,Sex,,
-B01001H_001E,B01001_001E,p_white,Race,,
-B06002_001E,,median_age,Age,,
-B06009_002E,B01001_001E,p_no_highschool,Education,,
-C18120_006E,C18120_002E,p_unemployed,Unemployment Rate,,
-C18120_001E,B01001_001E,p_labor_force,Labor Force Participation Rate,,
-B19326_001E,,median_income,Median Income,,
-B19083_001E,,gini,Income Inequality,,
-B17001_002E,B01001_001E,p_poverty,Poverty,,
-B24031_006E,,median_mfr_income,Manufacturing Earnings,,
-B06001_049E,B01001_001E,p_foreign_born,Born in USA,,
-B04006_005E,B01001_001E,p_american,Identify as American,,
+B01001H_001E,B01001_001E,p_white,Race,0.009465585462749004,0.9976387023925781
+B06002_001E,,median_age,Age,21.399999618530273,65.30000305175781
+B06009_002E,B01001_001E,p_no_highschool,Education,0.00895289983600378,0.32732734084129333
+C18120_006E,C18120_002E,p_unemployed,Unemployment Rate,0.0,0.3147113621234894
+C18120_001E,B01001_001E,p_labor_force,Labor Force Participation Rate,0.22899353504180908,0.7795040011405945
+B19326_001E,,median_income,Median Income,9908.0,61012.0
+B19083_001E,,gini,Income Inequality,0.32899999618530273,0.6237000226974487
+B17001_002E,B01001_001E,p_poverty,Poverty,0.014184396713972092,0.4600580036640167
+B24031_006E,,median_mfr_income,Manufacturing Earnings,2499.0,156250.0
+B06001_049E,B01001_001E,p_foreign_born,Born in USA,0.0,0.516537070274353
+B04006_005E,B01001_001E,p_american,Identify as American,0.0,0.6453639268875122
