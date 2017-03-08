@@ -43,10 +43,10 @@ def query_database(d):
         control=None
     else:
         if len(d['control'])==1:
-            command2=command2+d['control'][0]+' from data;'
+            command2=command2+d['control'][0][0]+' from data;'
         else:
             for item in d['control']:
-                command2=command2+item+', '
+                command2=command2+item[0]+', '
             command2=command2[:-2]+' from data;'
         c.execute(command2)
         names2=get_header(c)
