@@ -4,6 +4,8 @@
 
 
 import formatdata
+import numpy as np
+import pandas as pd
 
 
 SUMMARY_FILE_VARS = {'male': '002', 'female': '026', 'female_alt': '017',
@@ -38,13 +40,13 @@ def create_variable_dict(sex=None, race=None, employment=None, income=None,
     '''
     '''
     if name == None:
-        name = 'percent'
+        name = 'p_'
         characteristics = [employment, income, race, sex]
         for c in characteristics:
             if c == None:
                 pass
             else:
-                name = name + " " + c
+                name = name + "_" + c
         name = name
 
     char_dict = {'name': name, 'sex': sex, 'race': race, 'employment': employment, 
@@ -54,36 +56,20 @@ def create_variable_dict(sex=None, race=None, employment=None, income=None,
     return var_dict
 
 
-def get_variables():
+def get_variables(filename='variables.csv'):
     '''
     '''
-    women = create_variable_dict('female')
-    white = create_variable_dict(race='white')
-    black = create_variable_dict(race='black')
-    latino = create_variable_dict(race='latino')
-    white_men = create_variable_dict('male', 'white')
-    gini = {'id': 'B19083_001E', 'name': 'Gini Coefficient', 'type': 'value'}
-    income = {'id': 'B19301_001E', 'name': 'per capita income', 
-        'type': 'value'}
-    white_income = {'id': 'B19301H_001E', 'name': 
-    'per capita income amongst whites', 'type': 'value'}
-    unemployed = {'id': 'B23025_005E', 'name': 'unemployment rate', 
-        'type': 'labor_force'}
-    uneducated = {'id': 'B06009_002E', 'name': "no highschool diploma",
-        'type': 'population'}
-    uneducated_unemployed = {'id': 'B23006_007E', 'name': 
-        'unemployment rate (no highschool)', 'type': 'labor_force'}
-    uneducated_white_men = {'id': 'C15002H_003E', 'name': 
-            'white men w/o highschool diploma', 'type': 'population'}
-    labor_force_rate = {'id': 'B23025_003E', 'name': 
-        'labor force particiipation rate', 'type': 'population'}
-
-
-
-    var_dicts = [women, white, black, latino, white_men, gini, income,
-                 white_income, unemployed, uneducated, uneducated_unemployed, 
-                 labor_force_rate, uneducated_white_men]
-
+    variables = pd.read_csv('variables.csv')
+    var_dicts= []
+    for var in variables.itertuples():
+        var_id = var[1]
+        divisor = str(var[2])
+        if divisor == 'nan':
+            divisor = None
+        name = var[3]
+        display = var[4]
+        d = {'id': var_id, 'divisor': divisor, 'name': name, 'display': display}
+        var_dicts.append(d)
     return var_dicts
 
 
@@ -99,6 +85,7 @@ def get_data():
 
 
 if __name__ == '__main__':
-    #df = get_data()
-    #df
-    pass
+    #var_dicts = get_variables()
+    df, variables = get_data()
+    print(df)
+    

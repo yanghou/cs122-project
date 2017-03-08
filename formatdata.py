@@ -54,6 +54,11 @@ def get_election_results():
     results.insert(3, 'county', results.fips.str.slice(2))
     results = results.iloc[:,[0,1,2,3,5,7,11,8,9,12,10]]
 
+    results[results.columns[5:10]] = results[results.columns[5:10]].astype(np.float32)
+    mgn = (results.votes_trump - results.votes_clinton) / results.total_votes
+    results.insert(10,"margin", mgn)
+
+    results.to_csv("election_results.csv")
     return results
 
 
@@ -62,10 +67,12 @@ def create_pandas_from_url(url):
     Takes a census ACS API url string and returns that string as a DataFrame
     '''
     pm = urllib3.PoolManager()
+    print("url:", url)
     r = pm.request('GET', url)
     table = json.loads(r.data.decode('utf-8'))
     array = np.array(table[1:])
     df = pd.DataFrame(array[1:], columns=table[0])
+    print("HELLO!!")
 
     return df
 
@@ -82,23 +89,15 @@ def get_summary_file_table(var_dict, state="*", county="*"):
     '''
     # Get the total population (B01001_001E) and all other variables chosen
     var_id = var_dict['id']
-    var_type = var_dict.get('type', 'population')
-    if var_type == 'population':
-        normalize = True
-        denominator = ',B01001_001E'
-    elif var_type == 'households':
-        normalize = True
-        denominator = ',B22002_001E'
-    elif var_type == 'labor_force':
-        normalize = True
-        denominator = ',B23025_003E'
-    elif var_type == 'value':
+    divisor = var_dict['divisor']
+    if divisor is None:
+        divisor = ''
         normalize = False
-        denominator = ''
     else:
-        raise ValueError('Unrecognized variable type')
+        divisor = "," + divisor
+        normalize = True
 
-    get_string = "get={}{}".format(var_id, denominator)
+    get_string = "get={}{}".format(var_id, divisor)
     for_string = "&for=county:{}&in=state:{}".format(county, state)
     url = SUMMARY_FILE_URL + get_string + for_string
     df = create_pandas_from_url(url)
@@ -106,8 +105,8 @@ def get_summary_file_table(var_dict, state="*", county="*"):
     # Normalize values
     df[df.columns[:-2]] = df[df.columns[:-2]].astype(np.float32)
     if normalize:
-        columns = [var_id, denominator[1:]]
-        df[var_id] = df[var_id] / df[denominator[1:]]
+        columns = [var_id, divisor[1:]]
+        df[var_id] = df[var_id] / df[divisor[1:]]
 
     # Formatting
     df = df.loc[:,['state','county',var_id]]
@@ -127,7 +126,7 @@ def merge_acs_election(acs):
 
     election_results = get_election_results()
     election_results = election_results.loc[:,
-        ['fips','state','county','pct_clinton','pct_trump','lead']]
+        ['fips','state','county','margin','lead']]
     df = pd.merge(election_results, acs, on=['state','county'])
 
     return df
