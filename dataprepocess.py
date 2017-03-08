@@ -1,9 +1,8 @@
 import pandas as pd
-import copy
 
-data=pd.read_csv('data.csv',skiprows=[0],names=['id','fips','state','county','pct_clinton','pct_trump','lead','percent_female','percent_white','percent_black','percent_latino','percent_white_male','Gini_Coefficient','per_capita_income','per_capita_income_amongst_whites','unemployment_rate','no_highschool_diploma','unemployment_rate_no_highschool','labor_force_participation_rate','white_men_with_highschool_diploma'])
-geo=pd.read_csv('geocodes.csv',skiprows=[0],names=['id','fips','state','county','full_name','state_name','county_name'])
+data=pd.read_csv('data.csv',dtype={'fips':object,'state':object,'county':object},skiprows=[0],names=['id','fips','state','county','margin','lead','p_female','p_white','median_age','p_no_highschool','p_unemployed','p_labor_force','median_income','gini','p_poverty','median_mfr_income','p_foreign_born','p_american'])
+geo=pd.read_csv('geocodes.csv',dtype={'fips':object,'state':object,'county':object},skiprows=[0],names=['id','fips','state','county','full_name','state_name','county_name'])
 data=data.drop('id',axis=1)
-data.to_csv('data_new.csv',index=False)
+data.to_csv('data_new.csv',index=False,header=False)
 geo=geo.drop('id',axis=1)
-geo.to_csv('geo_new.csv',index=False)
+geo.to_csv('geo_new.csv',index=False,header=False)
