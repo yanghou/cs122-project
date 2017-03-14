@@ -1,11 +1,10 @@
-SECTION 1 : LIBRARY INSTALLATION:
+SECTION 1 : LIBRARY INSTALLATION
 
 You need to install basemap library and GEOS library to run the application as showed in the following steps:
 
-0) Install pre-requisite python modules numpy and matplotlib.
+0) Make sure pre-requisite python modules numpy and matplotlib have been installed.
 
-1) Then download basemap-X.Y.Z.tar.gz (approx 100 mb) from
-the sourceforge download site, unpack and cd to basemap-X.Y.Z.
+1) cd to the directory basemap-1.0.7 under the cs122-project repo.
 
 2) Install the GEOS library.  If you already have it on your
 system, just set the environment variable GEOS_DIR to point to the location 
@@ -30,7 +29,7 @@ SECTION 2: HOW TO USE THIS APPLICATION
 
 The frontend is a light website using Django framework. The user could get access to the fontend as follows:
 
-1) The user may cd to the directory named vote under the cs122-project directory, and run the command: python manage.py runserver.
+1) The user may cd to the directory named vote under the cs122-project repo, and run the command: python manage.py runserver.
 
 2) The user may type the address http://127.0.0.1:8000 in a browser, the main page should show up. 
 
