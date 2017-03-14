@@ -10,16 +10,21 @@ import matplotlib.pyplot as plt
 
 
 def lin_regression(X, Y):
-        '''
-        '''
-        linreg = LinearRegression().fit(X, Y)
-        b = linreg.coef_
-        irct = linreg.intercept_
-        r2 = linreg.score(X,Y)
-        return b, r2, irct
+    '''
+    Performs a basic linear regression.
+    '''
+    linreg = LinearRegression().fit(X, Y)
+    b = linreg.coef_
+    irct = linreg.intercept_
+    r2 = linreg.score(X,Y)
+    return b, r2, irct
 
 
 def run_separate_regressions(predictor_data, dependent_data, predictor_names, plot=False):
+    '''
+    Run multiple regressions based on the predictor variables given, returns a
+    list of tuples with the results of the regressions.
+    '''
     rv = []
     for var in predictor_names:
         X = predictor_data[[var]]
@@ -32,14 +37,18 @@ def run_separate_regressions(predictor_data, dependent_data, predictor_names, pl
     return rv
 
 
-def run_combined_regressions(predictor_data, dependent_data, predictor_names, pdtr_means, plot=False):
+def run_combined_regressions(predictor_data, dependent_data, predictor_names, 
+    pdtr_means, plot=False):
+    '''
+    Runs a full regression based on all of the predictors given. Returns the 
+    results of the regression.
+    '''
     ircts_ctrl = []
     X = predictor_data
     Y = dependent_data
     b, r2, irct = lin_regression(X, Y)
     for index, var in enumerate(predictor_names):
         X = predictor_data[[var]]
-        #other_means = np.concatenate(pdt_means[:,:index], pdt_means[:,index+1:], axis=1)
         other_means = pdt_means[:index] + pdt_means[index+1:]
         other_b = np.concatenate(( b[:,:index], b[:,index+1:] ), axis=1)
         irct_new = irct + np.dot(other_b.T, other_means)
@@ -93,6 +102,10 @@ class Model(object):
 
 
     def _get_expected(self):
+        '''
+        Sets the expected values of the variables of interest and produces
+        their value ranges.
+        '''
         expected = []
         ranges = []
         for var in self.i_var + self.c_var:
@@ -110,19 +123,27 @@ class Model(object):
 
 
     def linreg_independent(self, separate=False, plot=False):
+        '''
+        Runs regressions on the independent variables. Can be run as separate
+        regressions or as one single regression.
+        '''
         if separate:
-            coefs = run_separate_regressions(self.i_data, self.d_data, self.i_var, plot)
+            coefs = run_separate_regressions(self.i_data, self.d_data, 
+                        self.i_var, plot)
         else:
-            coefs = run_combined_regressions(self.i_data, self.d_data, self.i_var, self.i_expected, plot)
+            coefs = run_combined_regressions(self.i_data, self.d_data, 
+                        self.i_var, self.i_expected, plot)
 
         return coefs
 
 
     def control_variables(self, values=None):
+        '''
+        Controls for Model's control variables
+        '''
         X, Y = self.c_data, self.d_data
         b, r2, irct = lin_regression(X, Y)
 
-        # Might be easier just to subtract mean values from X and then compute dot product
         ctrl_effect = np.dot(X, b.T)
         controlled = (Y - ctrl_effect)
 
@@ -142,6 +163,9 @@ class Model(object):
 
 
     def get_scaled_coefs(self):
+        '''
+        Gets normalized linear coefficients for the variables of interest.
+        '''
         X = self.data[self.c_var+self.i_var]
         X_scaled = preprocessing.scale(X)
         self.scaled_predictors = X_scaled
@@ -159,8 +183,11 @@ class Model(object):
 
 
     def determine_winner(self, margin, plot=False):
-        #row_count = margin.shape[0]
-        #trump = pd.DataFrame({'lead': "Donald Trump"}, index=list(range(row_count)))
+        '''
+        Given a county vote DataFrame with new vote margin values, calculate
+        which candidate won in each county and return DataFrames of the 
+        values for the two variables, as well as the names of those variables.
+        '''
         
         trump = self.i_data[margin.margin > 0.0]
         clinton = self.i_data[margin.margin < 0.0]
@@ -172,10 +199,13 @@ class Model(object):
         if plot:
             plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var)
 
-        return X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var
+        return X_trump, Y_trump, X_clinton, Y_clinton, x_var, y_var
 
 
     def go(self, values=None, plot=False):
+        '''
+        Runs the analysis of the model, generating the betas and creating the plots
+        '''
         controlled, b_ctrl, r2_ctrl, irct_ctrl = self.control_variables(values=values)
 
         # Get Basic Linear Regression for each i_var
@@ -198,7 +228,7 @@ class Model(object):
         #(row['Name in Interface'], 
 
 
-        # Plot Stuff
+        # Plot Graphs
         plt.clf()
         f, axarr = plt.subplots(2,2)
         
@@ -235,6 +265,9 @@ class Model(object):
 
 
 def find_best(df, variables, current_vars, best_r2=0.0, verbose=False):
+    '''
+    Finds the variable with the highest R2.
+    '''
     best_var = None
     for var in variables:
         if verbose:
@@ -250,6 +283,10 @@ def find_best(df, variables, current_vars, best_r2=0.0, verbose=False):
 
 
 def find_best_k(df, variables, k, threshold=0, verbose=False):
+    '''
+    Goes through the list of variables, repeatedly choosing the variable that,
+    when added, generates the best R2, until k variables have been chosen.
+    '''
     remaining_vars = list(variables)
     current_vars = []
     v_dict = {}
@@ -276,6 +313,8 @@ def find_best_k(df, variables, k, threshold=0, verbose=False):
 
 def plot_single_variable(X, Y, b, irct, x_var, ax=None):
     '''
+    Creates a plot of a variable vs. the vote margin. Plots the linear
+    approximation of the data as well.
     '''
     x_max = X.max().iat[0]
     x_min = X.min().iat[0]
@@ -306,6 +345,9 @@ def plot_single_variable(X, Y, b, irct, x_var, ax=None):
 
 def plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var, ax=None):
     '''
+    Plots two sets of counties on a two variable plane, where the first set is
+    all the counties that voted for Trump, and the second is all the counties 
+    that voted for Clinton
     '''
     if ax is None:
         plt.scatter(X_trump, Y_trump, color='red', alpha=0.1)
@@ -334,33 +376,3 @@ if __name__ == "__main__":
     
     b_dict = m.go(plot=True)
     v_dict = m.best_k(4)
-    
-
-    #controlled, b, r2, irct = m.control_variables()
-
-
-    #m.linreg_independent(separate=True, plot=True)
-    #m.linreg_independent(separate=False, plot=True)
-
-
-    #dependent = data.loc[:,['margin']]
-    #independent = data.loc[:,['p_female', 'p_white']]
-    #control = data.loc[:,['median_income', 'p_unemployed']]
-    #m = Model(dependent, independent, control)
-    
-    #b_1, r2_1, i_1 = m.get_scaled_coefs()
-    
-    #controlled, b, r2, i = m.control_variables()
-    #plot_single_variable(independent.iloc[:,0], controlled, b[0][0], i, independent.columns[0])
-
-
-    #print(b)
-    #print(r2)
-    #plot_single_variable(control, dependent, b, i, 'p_white')
-    #X_scaled, b, r2, i = lin_regression(independent, dependent)
-    #plot_single_variable(independent, dependent, b, i, 'p_white')
-    #plot_single_variable(X_scaled, dependent, b, i, 'p_white')
-
-
-    
-

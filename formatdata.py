@@ -117,7 +117,7 @@ def get_summary_file_table(var_dict, state="*", county="*"):
 
 def merge_acs_election(acs):
     '''
-
+    Combines an acs table with the election results
     '''
     if not 'state' in acs.columns:
         raise ValueError('acs data missing state column')
@@ -134,6 +134,8 @@ def merge_acs_election(acs):
 
 def create_single_variable_table(var_dict, state="*", county="*"):
     '''
+    Creates a table with the election results of each county, along with the
+    the values of the chosen variable.
     '''
     acs = get_summary_file_table(var_dict, state, county)
     df = merge_acs_election(acs)

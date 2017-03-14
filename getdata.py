@@ -38,6 +38,7 @@ def get_summary_variable_id(char_dict):
 def create_variable_dict(sex=None, race=None, employment=None, income=None, 
     name=None):
     '''
+    Creates a dictionary for a potential ACS variable
     '''
     if name == None:
         name = 'p_'
@@ -58,6 +59,7 @@ def create_variable_dict(sex=None, race=None, employment=None, income=None,
 
 def get_variables(filename='variables.csv'):
     '''
+    Gets the variable info from the csv file.
     '''
     variables = pd.read_csv('variables.csv')
     var_dicts= []
@@ -75,6 +77,7 @@ def get_variables(filename='variables.csv'):
 
 def get_data():
     '''
+    Creates the full data DataFrame, and also returns a list of the variables.
     '''
     var_dicts = get_variables()
     df = formatdata.create_multi_variable_table(var_dicts)
