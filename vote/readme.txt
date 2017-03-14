@@ -1,3 +1,5 @@
+SECTION 1 : LIBRARY INSTALLATION:
+
 You need to install basemap library and GEOS library to run the application as showed in the following steps:
 
 0) Install pre-requisite python modules numpy and matplotlib.
@@ -24,3 +26,14 @@ run the usual 'python setup.py install'.  Check your installation
 by running "from mpl_toolkits.basemap import Basemap" at the python
 prompt.
 
+SECTION 2: HOW TO USE THIS APPLICATION
+
+The frontend is a light website using Django framework. The user could get access to the fontend as follows:
+
+1) The user may cd to the directory named vote under the cs122-project directory, and run the command: python manage.py runserver.
+
+2) The user may type the address http://127.0.0.1:8000 in a browser, the main page should show up. 
+
+3) The user may choose one of the two links on the main page to explore the search function and predict funtion respectively. 
+
+4) The user may enter ctrl-c to quit the application. 
