@@ -9,7 +9,13 @@ import query
 
 
 def analyze(query_dict):
-    
+    '''
+    Takes in a query dictionary with a list of variable names for 'independent'
+    and a list of tuples for 'control'. Creates a model based on these 
+    variables and runs the analysis of the model.
+
+    Returns: the beta values for the independnet and control variables
+    '''
     i_var = query_dict.get('independent', None)
     c_var = [x for (x,y) in query_dict.get('control', [])]
     c_values = [y for (x,y) in query_dict.get('control', [])]
@@ -17,15 +23,6 @@ def analyze(query_dict):
 
     if i_var is None:
         return [(None, None)]
-
-    fuckthis = '''
-    independent, control, margin = query.query_database(query_dict)
-    data = pd.merge(independent, control, on='fips')
-    data = pd.merge(data, margin, on='fips').iloc[:,1:]
-    i_data = independent.iloc[:,1:]
-    d_data = margin.iloc[:,1:]
-    c_data = control.iloc[:,1:]
-    '''
 
     i_var = query_dict['independent']
     c_var = [x for (x,y) in query_dict['control']]
@@ -43,6 +40,9 @@ def analyze(query_dict):
 
 
 def get_data():
+    '''
+    Returns a full pandas DataFrame of all the data
+    '''
     data = pd.read_csv('data_without_nans.csv',
         dtype={'fips': str, 'state': str, 'county': str})
     data = data.iloc[:,1:]
@@ -50,6 +50,10 @@ def get_data():
 
 
 def get_variable_names():
+    '''
+    Retrieves the variable name assignments from the variables.csv fil.
+    Also creates a dictionary relating database names to axes names.
+    '''
     variable_display_names = pd.read_csv('variables.csv')
     name_dict = {}
     for i, row in variable_display_names.iterrows():
@@ -59,5 +63,8 @@ def get_variable_names():
 
 if __name__ == "__main__":
     d = {"independent":['p_labor_force', 'p_white'], 
-        'control':[('median_income', None), ('p_unemployed',0.05), ('p_no_highschool',None)]}
+        'control':[('median_income', None), 
+                  ('p_unemployed',0.05), 
+                  ('p_no_highschool',None)]
+        }
     result = analyze(d)
