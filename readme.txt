@@ -27,7 +27,7 @@ prompt.
 
 SECTION 2: HOW TO USE THIS APPLICATION
 
-The frontend is a light website using Django framework. The user could get access to the fontend as follows:
+The frontend is a lightweight website using Django framework. The user could get access to the fontend as follows:
 
 1) The user may cd to the directory named vote under the cs122-project repo, and run the command: python manage.py runserver.
 
