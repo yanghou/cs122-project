@@ -25,6 +25,11 @@ def clean_header(s):
     return s
 
 def query_database(d):
+    '''
+    input: a dictionary from the interface containing information about different 
+    variables.
+    output: three pandas dataframe for different variables.
+    '''
     db=sqlite3.connect('data.db')
     c=db.cursor()
     command1='select fips,'
