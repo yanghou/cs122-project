@@ -1,0 +1,28 @@
+{% load staticfiles %}
+
+<html>
+
+    <head>
+           <title>LET US EXPLORE: US Presidential Election</title>
+           <link rel="stylesheet" type="text/css" href="{% static "main.css" %}" />
+
+    </head>
+
+
+    <body>
+          <div id="header">
+            <title>LET US EXPLORE</title>
+        </div>
+            <h1 >Welcome to the Corner of US Presidential Election!</h1>
+          <div class = 'image'>
+               <span><img class='img1' src="{% static "main_2.png" %}  "/></span> 
+               <span><img class='img2' src="{% static "main_3.png" %} "/></span> 
+          </div>
+
+          <div class = 'link'>
+	    <span>  <a href='/search' class='dark'>Search</a></span>
+            <span>  <a href='/predict' class='light'>Predict</a>  </span>
+
+          </div>
+     </body>
+</html>

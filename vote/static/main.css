@@ -1,0 +1,50 @@
+h1 {
+   font-size: 16pt;
+   text-align: center;
+}
+
+
+img{
+  width:400px;
+  height:300px;
+  margin-top: 2cm
+}
+
+.img1{
+  position: relative;
+  left: 150px;
+}
+
+.img2{
+   position: relative;
+   left: 300px;
+}
+
+a{
+font-size: 25pt;
+}
+
+.dark{
+   background-color: white;
+   position: relative;
+   left: 280px;
+ 
+}
+
+.dark a{
+  color: black;
+  text-decoration: underline;
+}
+
+.light{
+  background-color: white;
+  position: relative;
+  left: 750px;
+
+}
+
+.light a{
+   color: black;
+   text-decoration: none;
+}
+

@@ -199,7 +199,7 @@ class Model(object):
 
 
         # Plot Stuff
-        plt.close('all')
+        plt.clf()
         f, axarr = plt.subplots(2,2)
         
         for i, (X, Y, b, irct, x_var) in enumerate(idv_plot_params):

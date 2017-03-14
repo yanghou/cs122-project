@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from vote_test import views1
+from vote_test import predict_view
+from vote_test import search_view
+from vote_test import main_view
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$',views1.index,name = 'index'),
+    url(r'^$',main_view.index,name = 'index'),
+    url(r'^predict/',predict_view.index,name = 'prediction'),
+    url(r'^search/',search_view.index,name="search")
 #    url(r'^vote_test/',include('vote_test.urls'))
 ]

@@ -1,0 +1,12 @@
+Id,Divisor,Name in Database,Name in Interface,Low Value,High Value,Axes Name
+B01001H_001E,B01001_001E,p_white,Race,0.0094655855,0.9976387024,% White
+B06002_001E,,median_age,Age,21.3999996185,65.3000030518,Median Age
+B06009_002E,B01001_001E,p_no_highschool,Education,0.0089528998,0.3273273408,% Non-High-School Grads
+C18120_006E,C18120_002E,p_unemployed,Unemployment Rate,0,0.3147113621,Unemployment Rate
+C18120_001E,B01001_001E,p_labor_force,Labor Force Participation Rate,0.228993535,0.7795040011,LFP Rate
+B19326_001E,,median_income,Median Income,9908,61012,Median Income
+B19083_001E,,gini,Income Inequality,0.3289999962,0.6237000227,Gini Coefficient
+B17001_002E,B01001_001E,p_poverty,Poverty,0.0141843967,0.4600580037,% In Poverty
+B24031_006E,,median_mfr_income,Manufacturing Earnings,2499,156250,Median Income (Manufacturing)
+B06001_049E,B01001_001E,p_foreign_born,Immigration,0,0.5165370703,% Born Outside USA
+B04006_005E,B01001_001E,p_american,Identify as American,0,0.6453639269,% Identifying as American
