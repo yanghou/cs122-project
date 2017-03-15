@@ -8,8 +8,6 @@ from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
 
-DATA_DIR = os.path.dirname(__file__)
-
 
 def lin_regression(X, Y):
     '''
@@ -227,9 +225,11 @@ class Model(object):
         name_dict = {}
         for i, row in variable_display_names.iterrows():
             name_dict[row['Name in Database']] = row['Axes Name']
+        #(row['Name in Interface'], 
 
 
         # Plot Graphs
+        plt.clf()
         f, axarr = plt.subplots(2,2)
         
         for i, (X, Y, b, irct, x_var) in enumerate(idv_plot_params):
@@ -240,7 +240,6 @@ class Model(object):
         x_var = name_dict.get(x_var, x_var)
         y_var = name_dict.get(y_var, y_var)
         plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var, ax=axarr[1,0])
-        
         title = x_var + " vs. " + y_var + " (Uncontrolled)"
         axarr[1,0].set_title(title)
 
@@ -248,23 +247,18 @@ class Model(object):
         x_var = name_dict.get(x_var, x_var)
         y_var = name_dict.get(y_var, y_var)
         plot_two_variables(X_trump,Y_trump, X_clinton, Y_clinton, x_var, y_var, ax=axarr[1,1])
-        
         title = x_var + " vs. " + y_var + " (Controlled)"
         axarr[1,1].set_title(title)
 
 
         f.subplots_adjust(hspace=0.35, wspace=0.35)
         f.set_size_inches(10,10, forward=False)
-        graph_path = os.path.join(DATA_DIR,'static')
-        plt.savefig(os.path.join(graph_path,'analyze.png'))
+        plt.savefig('analyze.png')
 
         return b_dict
 
 
     def best_k(self, k):
-        '''
-        Runs the find best k algorithm
-        '''
         variables = self.c_var + self.i_var
         v_dict, current_vars, max_r2 = find_best_k(self.data, variables, k)
         return v_dict

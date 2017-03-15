@@ -1,4 +1,4 @@
-### CS122, Winter 2017: Course search engine: search
+### the backend file for search function
 ###
 ### Huanye Liu
 
@@ -170,17 +170,4 @@ def clean_header(s):
 
 
 
-########### some sample inputs #################
-
-example_0 = {"time_start":930,
-             "time_end":1500,
-             "day":["MWF"]}
-
-example_1 = {"building":"RY",
-             "dept":"CMSC",
-             "day":["MWF", "TR"],
-             "time_start":1030,
-             "time_end":1500,
-             "enroll_lower":20,
-             "terms":"computer science"}
 
