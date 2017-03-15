@@ -1,13 +1,14 @@
 # CS 122 Project
 #
 # Chris Summers
-
+import os
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 from sklearn import preprocessing
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
 DATA_DIR = os.path.dirname(__file__)
 
 
@@ -75,13 +76,18 @@ class Model(object):
         elif len(i_var) > 2:
             self.i_var = i_var[:2]
         elif len(i_var) == 1:
-            self.i_var = i_var.append('p_white')
-        else:
-            self.i_var = ['p_female','p_white']
-
+            i_var.append('p_white')
+            self.i_var = i_var
+        elif len(i_var) == 0:
+            i_var.append('p_female')
+            i_var.append('p_white')
+            self.i_var = i_var
         if type(c_var) != list:
             self.c_var = [c_var]
             print("Control variable not passed as list")
+        elif len(c_var)==0:
+#            c_var.append('p_no_highschool')
+            self.c_var = c_var
         else:
             self.c_var = c_var
 
@@ -257,7 +263,7 @@ class Model(object):
         f.set_size_inches(10,10, forward=False)
         graph_path = os.path.join(DATA_DIR,'static')
         plt.savefig(os.path.join(graph_path,'analyze.png'))
-
+        plt.clf()
         return b_dict
 
 
