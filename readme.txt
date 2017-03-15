@@ -1,6 +1,6 @@
 SECTION 1 : LIBRARY INSTALLATION
 
-You need to install basemap library and GEOS library to run the application as showed in the following steps:
+You need to install basemap library and GEOS library to run the application as shown in the following steps:
 
 0) Make sure pre-requisite python modules numpy and matplotlib have been installed.
 
